@@ -12,6 +12,8 @@
 #pragma comment(lib, "dxerr.lib")
 #pragma comment(lib, "legacy_stdio_definitions.lib")
 
+#include <time.h>
+
 class Paint {
 private:
 	IDirect3D9Ex* d3dObject = NULL; //used to create device
@@ -24,6 +26,11 @@ private:
 
 	int d3D9Init(HWND hWnd);
 	void drawText(char* String, int x, int y, int a, int r, int g, int b);
+
+	double time = 0;
+	clock_t start;
+	clock_t end;
+
 public:
 	Paint();
 	Paint(HWND hWnd, HWND targetWnd, int width, int height);

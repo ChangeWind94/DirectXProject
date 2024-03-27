@@ -5,6 +5,7 @@
 #include "framework.h"
 #include "DirectXProject.h"
 #include "Paint.h"
+#include "time.h"
 
 // 전역 변수:
 HINSTANCE hInst;                                // current instance
@@ -13,6 +14,7 @@ LPCSTR targetWindowName = "MapleStory";  // main window class name & The title b
 HWND targetHWND, overlayHWND;
 int width, height;
 Paint paint;
+int second = 0;
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 ATOM                registerClass(HINSTANCE hInstance);
@@ -42,10 +44,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
         return FALSE;
     }
     paint = Paint(overlayHWND, targetHWND, width, height);
+    
     MSG msg;
 
     // Main message loop:
     while (GetMessage(&msg, nullptr, 0, 0)) {
+        
         TranslateMessage(&msg);
         DispatchMessage(&msg);
 

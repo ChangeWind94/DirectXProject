@@ -43,6 +43,7 @@ Paint::Paint(HWND hWnd, HWND targetWnd, int width, int height) {
 	this->height = height;
 	this->targetWnd = targetWnd;
 	d3D9Init(hWnd);
+	start = clock();
 }
 
 
