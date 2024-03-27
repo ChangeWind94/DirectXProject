@@ -6,12 +6,15 @@
 #include "DirectXProject.h"
 #include "Paint.h"
 #include "time.h"
+#include <string>
+#include "Utils.h"
+#include "tchar.h"
 
 // 전역 변수:
 HINSTANCE hInst;                                // current instance
 WCHAR overlayWindowName[100] = L"MapleStoryUtils";  // main window class name & The title bar text
 LPCSTR targetWindowName = "MapleStory";  // main window class name & The title bar text
-HWND targetHWND, overlayHWND;
+HWND targetHWND, targetHWND2, overlayHWND;
 int width, height;
 Paint paint;
 int second = 0;
@@ -29,12 +32,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     registerClass(hInstance);
 
 
-    targetHWND = FindWindowA(0, targetWindowName);
+    targetHWND = FindWindowA(NULL, targetWindowName);
     if (targetHWND) {
         RECT rect;
         GetWindowRect(targetHWND, &rect);
         width = rect.right - rect.left;
         height = rect.bottom - rect.top;
+        Utils utils = Utils();
+        
+
+        utils.logging("왜 안 돼냐");
     }
     else
         return FALSE;
