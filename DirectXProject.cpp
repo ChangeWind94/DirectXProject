@@ -17,6 +17,7 @@ LPCSTR targetWindowName = "MapleStory";  // main window class name & The title b
 HWND targetHWND, targetHWND2, overlayHWND;
 int width, height;
 Paint paint;
+Utils utils;
 int second = 0;
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
@@ -31,17 +32,27 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
     registerClass(hInstance);
 
+    utils = Utils();
 
-    targetHWND = FindWindowA(NULL, targetWindowName);
-    if (targetHWND) {
-        RECT rect;
-        GetWindowRect(targetHWND, &rect);
-        width = rect.right - rect.left;
-        height = rect.bottom - rect.top;
-        Utils utils = Utils();
-        
+    targetHWND2 = FindWindowExA(NULL, NULL, NULL, "MapleStory");
+    if (targetHWND2 != NULL) {
 
-        utils.logging("왜 안 돼냐");
+        while (targetHWND2 != NULL) {
+
+            RECT rect;
+            GetWindowRect(targetHWND2, &rect);
+            int width2 = rect.right - rect.left;
+            int height2 = rect.bottom - rect.top;
+
+            if (width2 > 500) {
+                targetHWND = targetHWND2;
+                width = width2;
+                height = height2;
+            }
+
+            targetHWND2 = FindWindowExA(NULL, targetHWND2, NULL, "MapleStory");
+        }
+
     }
     else
         return FALSE;
