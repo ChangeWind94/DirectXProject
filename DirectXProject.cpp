@@ -1,15 +1,17 @@
-﻿// MapleOverlayProject.cpp : 애플리케이션에 대한 진입점을 정의합니다.
+﻿// DirectXProject.cpp : 애플리케이션에 대한 진입점을 정의합니다.
 //
 
 #include "framework.h"
 #include "DirectXProject.h"
+#include "Paint.h"
 
 // 전역 변수:
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
 WCHAR overlayTitle[100] = L"Overlay";                  // 제목 표시줄 텍스트입니다.
-LPCSTR targetTitle = "Halo";
+LPCSTR targetTitle = "MapleStory";
 int width, height;
 HWND overlayHWND, targetHWND;
+Paint paint = Paint();
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -45,27 +47,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     {
         return FALSE;
     }
-
-    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_MAPLEOVERLAYPROJECT));
+    paint = Paint(overlayHWND, targetHWND, width, height);
 
     MSG msg;
 
     // 기본 메시지 루프입니다:
     while (GetMessage(&msg, nullptr, 0, 0))
     {
-        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
 
-            RECT rect;
-            GetWindowRect(targetHWND, &rect);
-            width = rect.right - rect.left;
-            height = rect.bottom - rect.top;
+        RECT rect;
+        GetWindowRect(targetHWND, &rect);
+        width = rect.right - rect.left;
+        height = rect.bottom - rect.top;
 
-            MoveWindow(overlayHWND, rect.left, rect.top, width, height, true);
-
-        }
+        MoveWindow(overlayHWND, rect.left, rect.top, width, height, true);
     }
 
     return (int) msg.wParam;
@@ -145,9 +142,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
  
     case WM_PAINT:
-        {
-
-        }
+        paint.render();
         break;
     case WM_DESTROY:
         PostQuitMessage(0);
