@@ -14,8 +14,11 @@
 
 #include <time.h>
 
-#include <mmsystem.h>
-#pragma comment(lib,"winmm.lib")
+#include "Mmsystem.h"
+#include "Digitalv.h"
+#pragma comment(lib, "winmm.lib")
+
+#include "tchar.h"
 
 class Paint {
 private:
@@ -37,8 +40,16 @@ private:
 	clock_t end;
 	double duration;
 	std::string text;
+	
+	HWND targetHWnd;
+	DWORD soundAlarm;
+
+	BOOLEAN flagAlarm;
+
 
 public:
+
+	void playSoundAlarm();
 	Paint();
 	Paint(HWND hWnd, HWND targetWnd, int width, int height);
 	int render();

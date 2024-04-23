@@ -1,6 +1,7 @@
 #include "Paint.h"
 
 
+
 int Paint::d3D9Init(HWND hWnd) {
 
 	if (FAILED(Direct3DCreate9Ex(D3D_SDK_VERSION, &d3dObject))) {
@@ -23,16 +24,34 @@ int Paint::d3D9Init(HWND hWnd) {
 
 	if (FAILED(res)) {
 		DXGetErrorString(res);
-		std::string str(DXGetErrorString(res));
-		std::string str2(DXGetErrorDescription(res));
+		std::wstring ws(DXGetErrorString(res));
+		std::string str(ws.begin(), ws.end());
+		std::wstring ws2(DXGetErrorDescription(res));
+		std::string str2(ws2.begin(), ws2.end());
 		std::string error = "Error: " + str + " error description: " + str2;
 		exit(1);
 	}
 
-	D3DXCreateFont(d3dDevice, 50, 0, FW_BOLD, 1, false, DEFAULT_CHARSET, OUT_DEVICE_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH, "Comic Sans", &d3dFont);
+	D3DXCreateFont(d3dDevice, 50, 0, FW_BOLD, 1, false, DEFAULT_CHARSET, OUT_DEVICE_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH, L"Comic Sans", &d3dFont);
 
 	return 0;
 
+}
+
+MCI_OPEN_PARMS mciOpen; //파일을 로드
+MCI_PLAY_PARMS mciPlay; //파일을 재생
+MCI_STATUS_PARMS mciStatus; //파일의 상태
+
+int dwID1;
+
+void Paint::playSoundAlarm() {
+	mciOpen.lpstrElementName = L"alarm.wav"; //파일 오픈
+	mciOpen.lpstrDeviceType = L"waveaudio"; // waveaudio / mpegvideo
+	mciSendCommand(0, MCI_OPEN, MCI_OPEN_ELEMENT | MCI_OPEN_TYPE, (DWORD)(LPVOID)&mciOpen);
+	dwID1 = mciOpen.wDeviceID;
+	mciSendCommand(dwID1, MCI_PLAY, MCI_NOTIFY, (DWORD)(LPVOID)&mciOpen);    //음악을 한 번 재생
+	Sleep(1800);    //효과음이 재생될 때까지 정지했다가
+	mciSendCommand(dwID1, MCI_SEEK, MCI_SEEK_TO_START, (DWORD)(LPVOID)NULL);    //음원 재생 위치를 처음으로 초기화
 }
 
 Paint::Paint() {};
@@ -43,6 +62,7 @@ Paint::Paint(HWND hWnd, HWND targetWnd, int width, int height) {
 	this->targetWnd = targetWnd;
 	d3D9Init(hWnd);
 	start = clock();
+	playSoundAlarm();
 }
 
 
@@ -66,8 +86,14 @@ int Paint::render()
 		text += std::to_string(second);
 		drawText(text.data(), width / 2, height / 2, 255, 171, 0, 182);
 
-		if (1==1) {
-			PlaySound("alarm.wav", NULL, SND_ASYNC);
+
+
+		if (((int)duration) % 10 == 1) {
+			flagAlarm = true;
+		}
+
+		if (((int)duration) % 10 == 3 && flagAlarm) {
+			flagAlarm = false;
 		}
 
 	}
