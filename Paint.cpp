@@ -55,7 +55,21 @@ int Paint::render()
 
 	if (targetWnd == GetForegroundWindow())
 	{
-		drawText((char*)"U got hacked broo", width / 10, height / 10, 255, 171, 0, 182);
+		end = clock();
+		duration = (double)(end - start) / CLOCKS_PER_SEC;
+		minute = (int)(duration / 60.0);
+		second = ((int)duration) % 60;
+		text = std::to_string(minute) + ":";
+		if (second < 10) {
+			text += "0";
+		} 
+		text += std::to_string(second);
+		drawText(text.data(), width / 2, height / 2, 255, 171, 0, 182);
+
+		if (1==1) {
+			PlaySound("alarm.wav", NULL, SND_ASYNC);
+		}
+
 	}
 
 	d3dDevice->EndScene();
