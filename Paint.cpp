@@ -82,11 +82,11 @@ int Paint::render()
 	d3dDevice->Clear(0, 0, D3DCLEAR_TARGET, 0, 1.0f, 0);
 	d3dDevice->BeginScene();
 
-	if (targetWnd == GetForegroundWindow())
-	{
+	//if (targetWnd == GetForegroundWindow())
+	//{
 		end = clock();
 		duration = (double)(end - start) / CLOCKS_PER_SEC;
-		time = ((int)duration) % 111;
+		time = (int)duration % 110 + 1;
 		minute = time / 60.0;
 		second = time % 60;
 		text = std::to_string(minute) + ":";
@@ -100,7 +100,7 @@ int Paint::render()
 		if(time == 110 && !isPlaying) {
 			system->playSound(sound, 0, false, &channel);
 		}
-	}
+	//}
 
 	d3dDevice->EndScene();
 	d3dDevice->PresentEx(0, 0, 0, 0, 0);
