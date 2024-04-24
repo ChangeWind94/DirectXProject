@@ -30,12 +30,12 @@ private:
 	int d3D9Init(HWND hWnd);
 	void drawText(char* String, int x, int y, int a, int r, int g, int b);
 
-	double time = 0;
 	int minute = 0;
 	int second = 0;
 	clock_t start;
 	clock_t end;
 	double duration;
+	int time;
 	std::string text;
 	
 	HWND targetHWnd;
@@ -44,6 +44,8 @@ private:
 	FMOD::System* system;
 	FMOD::Sound* sound;
 	FMOD::Channel* channel;
+
+	bool isPlaying = false;
 
 
 public:
