@@ -13,12 +13,9 @@
 #pragma comment(lib, "legacy_stdio_definitions.lib")
 
 #include <time.h>
-
-#include "Mmsystem.h"
-#include "Digitalv.h"
-#pragma comment(lib, "winmm.lib")
-
 #include "tchar.h"
+
+#include "fmod.hpp"
 
 class Paint {
 private:
@@ -44,12 +41,13 @@ private:
 	HWND targetHWnd;
 	DWORD soundAlarm;
 
-	BOOLEAN flagAlarm;
+	FMOD::System* system;
+	FMOD::Sound* sound;
+	FMOD::Channel* channel;
 
 
 public:
-
-	void playSoundAlarm();
+	int soundSetup();
 	Paint();
 	Paint(HWND hWnd, HWND targetWnd, int width, int height);
 	int render();

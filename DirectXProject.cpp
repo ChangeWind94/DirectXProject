@@ -10,6 +10,10 @@
 #include "Utils.h"
 #include "tchar.h"
 
+#include "Mmsystem.h"
+#include "Digitalv.h"
+#pragma comment(lib, "winmm.lib")
+
 // 전역 변수:
 HINSTANCE hInst;                                // current instance
 WCHAR overlayWindowName[100] = L"MapleStoryUtils";  // main window class name & The title bar text
