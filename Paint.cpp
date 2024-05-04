@@ -85,6 +85,8 @@ int Paint::render()
 	//if (targetWnd == GetForegroundWindow())
 	//{
 		end = clock();
+
+		// 메소 회수 타이밍 출력
 		duration = (double)(end - start) / CLOCKS_PER_SEC;
 		time = (int)duration % 110 + 1;
 		minute = time / 60.0;
@@ -92,14 +94,29 @@ int Paint::render()
 		text = std::to_string(minute) + ":";
 		if (second < 10) {
 			text += "0";
-		} 
+		}
 		text += std::to_string(second);
 		drawText(text.data(), width / 2, height / 2, 255, 171, 0, 182);
 
+		// 메소 회수 사운드
 		channel->isPlaying(&isPlaying);
-		if(time == 110 && !isPlaying) {
+		if (time == 110 && !isPlaying) {
 			system->playSound(sound, 0, false, &channel);
 		}
+
+		// 전체 시간 출력
+		time = (int)duration + 1;
+		minute = time / 60.0;
+		second = time % 60;
+		text = std::to_string(minute) + ":";
+		if (second < 10) {
+			text += "0";
+		}
+		text += std::to_string(second);
+		
+		drawText(text.data(), width / 2, height / 2 - 50, 255, 255, 102, 102);
+
+		
 	//}
 
 	d3dDevice->EndScene();
