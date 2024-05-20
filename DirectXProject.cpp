@@ -23,6 +23,10 @@ int width, height;
 Paint paint;
 Utils utils;
 int second = 0;
+LARGE_INTEGER frequency;
+LARGE_INTEGER start, end;
+const double targetFrameTime = 1.0 / 60.0; // 60 fps
+boolean running = true;
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 ATOM                registerClass(HINSTANCE hInstance);
@@ -65,13 +69,31 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     if (!InitInstance(hInstance, SW_SHOW)) {
         return FALSE;
     }
+
+    
+    
+
     paint = Paint(overlayHWND, targetHWND, width, height);
     
     MSG msg;
 
+    QueryPerformanceFrequency(&frequency);
+    QueryPerformanceCounter(&start);
+
     // Main message loop:
     while (GetMessage(&msg, nullptr, 0, 0)) {
         
+        QueryPerformanceCounter(&end);
+        double frameTime = static_cast<double>(end.QuadPart - start.QuadPart) / frequency.QuadPart;
+        start = end;
+
+        // 입력 처리
+        // ProcessInput();
+
+        // 업데이트 및 렌더링
+        // Update(frameTime);
+        // Render();
+
         TranslateMessage(&msg);
         DispatchMessage(&msg);
 
@@ -82,6 +104,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
         MoveWindow(overlayHWND, rect.left, rect.top, width, height, true);
 
+        paint.render();
+
+        // 프레임 타임 유지
+        if (frameTime < targetFrameTime) {
+            Sleep((targetFrameTime - frameTime) * 1000); // 밀리초 단위로 변환
+        }
+
+        // 종료 조건 체크
+        /*if (CheckForExitCondition()) {
+            running = false;
+        }*/
     }
 
     return (int)msg.wParam;
@@ -150,7 +183,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
     case WM_PAINT:
-        paint.render();
         break;
     case WM_DESTROY:
         PostQuitMessage(0);
